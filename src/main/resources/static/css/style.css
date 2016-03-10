@@ -1,0 +1,26 @@
+.content {
+	margin: 10px 0px;
+}
+
+.content-module {
+	margin-bottom: 10px;
+}
+
+.header {
+	margin: 10px 0px;
+}
+
+.footer {
+	margin: 10px 0px;
+	border-top: 1px solid #ddd;
+}
+
+.cluster-module {
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.cluster-module label {
+	color: #337ab7;
+}

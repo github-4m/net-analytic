@@ -16,7 +16,7 @@ public class ViewController {
   @RequestMapping(method = RequestMethod.GET)
   public String viewHome() throws Exception {
     LOGGER.info("invoking view home at controller");
-    return "home.html";
+    return "home";
   }
 
 }

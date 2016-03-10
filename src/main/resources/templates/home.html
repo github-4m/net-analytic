@@ -1,3 +1,103 @@
-<html>
-<body>TeST</body>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" ng-app="id.co.blogspot.fathan.netanalytic.app.home">
+<head>
+<title>Network Analytic</title>
+<link href="../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" rel="stylesheet" />
+<link href="../static/css/font-awesome.min.css" th:href="@{css/font-awesome.min.css}" rel="stylesheet" />
+<link href="../static/css/angular-chart.min.css" th:href="@{css/angular-chart.min.css}" rel="stylesheet" />
+<link href="../static/css/style.css" th:href="@{css/style.css}" rel="stylesheet" />
+<script src="../static/js/angular.min.js" th:src="@{js/angular.min.js}"></script>
+<script src="../static/js/angular-resource.min.js" th:src="@{js/angular-resource.min.js}"></script>
+<script src="../static/js/ui-bootstrap.min.js" th:src="@{js/ui-bootstrap.min.js}"></script>
+<script src="../static/js/chart.min.js" th:src="@{js/chart.min.js}"></script>
+<script src="../static/js/angular-chart.min.js" th:src="@{js/angular-chart.min.js}"></script>
+<script src="../static/js/home/home-app.js" th:src="@{js/home/home-app.js}"></script>
+<script src="../static/js/home/home-controller.js" th:src="@{js/home/home-controller.js}"></script>
+<script src="../static/js/home/home-service.js" th:src="@{js/home/home-service.js}"></script>
+</head>
+<body>
+  <div ng-controller="homeController">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="header"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <uib-tabset> <uib-tab index="0" heading="Network Cluster">
+          <div class="content">
+            <div class="row" ng-if="!isCentroidsExist()">
+              <div class="col-sm-12">
+                <div class="text-center">
+                  <p>Please click button "Cluster Now" to get the result</p>
+                  <button type="button" class="btn btn-sm btn-primary" ng-click="clickCluster()">Cluster Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-if="isCentroidsExist()">
+              <div class="col-sm-12" ng-if="!isLoading('cluster')">
+                <div class="col-sm-12 content-module">
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="clickCluster()">Cluster</button>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="cluster-module">
+                    <label>Total Data per Cluster</label>
+                    <canvas id="doughnut" class="chart chart-doughnut" chart-data="totalPerClusterDatas"
+                      chart-labels="totalPerClusterLabels">
+                    </canvas>
+                  </div>
+                </div>
+                <div class="col-sm-7">
+                  <div class="cluster-module">
+                    <label>Centroid of Cluster</label>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="text-center">Cluster</th>
+                          <th class="text-center">Attr 1</th>
+                          <th class="text-center">Attr 2</th>
+                          <th class="text-center">Attr 3</th>
+                          <th class="text-center">Attr 4</th>
+                          <th class="text-center">Attr 5</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="centroid in centroids">
+                          <td class="text-center">{{$index + 1}}</td>
+                          <td>{{centroid[0]}}</td>
+                          <td>{{centroid[1]}}</td>
+                          <td>{{centroid[2]}}</td>
+                          <td>{{centroid[3]}}</td>
+                          <td>{{centroid[4]}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12" ng-if="isLoading('cluster')">
+                <div class="text-center">
+                  <img src="../static/images/loader.gif" th:src="@{images/loader.gif}" />
+                </div>
+              </div>
+            </div>
+          </div>
+          </uib-tab> <uib-tab index="1" heading="System Parameter">sistem parameter</uib-tab> </uib-tabset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="footer">
+            <div class="text-center">
+              <small>Copyright 2016 Network Analytic</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
 </html>
