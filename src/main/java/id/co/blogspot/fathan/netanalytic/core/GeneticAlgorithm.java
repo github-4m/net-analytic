@@ -96,7 +96,7 @@ public class GeneticAlgorithm {
           c += Math.pow(networkAccess.getUrlCluster() - individual.get((k * totalAttribute) + 2), 2);
           c += Math.pow(networkAccess.getAccessDuration() - individual.get((k * totalAttribute) + 3), 2);
           c += Math.pow(networkAccess.getAccessSize() - individual.get((k * totalAttribute) + 4), 2);
-          c = Math.sqrt(c);
+          c = Math.sqrt(c / 5);
           if (k == 0) {
             b = c;
           } else if (b > c) {

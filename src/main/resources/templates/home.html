@@ -75,6 +75,7 @@
                         </tr>
                       </tbody>
                     </table>
+                    <label>Cluster Time</label> <strong>{{clusterTime}} ms</strong>
                   </div>
                 </div>
               </div>
@@ -85,7 +86,37 @@
               </div>
             </div>
           </div>
-          </uib-tab> <uib-tab index="1" heading="System Parameter">sistem parameter</uib-tab> </uib-tabset>
+          </uib-tab> <uib-tab index="1" heading="System Parameter">
+          <div class="content">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-horizontal" ng-if="!isLoading('systemParameter')">
+                  <div class="form-group form-group-sm" ng-repeat="systemParameter in systemParameters">
+                    <label class="col-sm-2 control-label">{{systemParameter.code}}</label>
+                    <div class="col-sm-3">
+                      <input ng-model="systemParameter.value" class="form-control" type="text" />
+                    </div>
+                  </div>
+                  <div class="form-group form-group-sm">
+                    <div class="col-sm-offset-2 col-sm-3" ng-if="!isLoading('bulkSave')">
+                      <button type="button" class="btn btn-sm btn-primary" ng-click="clickSave()">Save</button>
+                    </div>
+                    <div class="col-sm-offset-2 col-sm-3" ng-if="isLoading('bulkSave')">
+                      <div class="text-center">
+                        <img src="../static/images/loader.gif" th:src="@{images/loader.gif}" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12" ng-if="isLoading('systemParameter')">
+                <div class="text-center">
+                  <img src="../static/images/loader.gif" th:src="@{images/loader.gif}" />
+                </div>
+              </div>
+            </div>
+          </div>
+          </uib-tab> </uib-tabset>
         </div>
       </div>
       <div class="row">

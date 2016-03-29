@@ -20,3 +20,25 @@ angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('filter
 				}
 			});
 		} ]);
+angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('filterAllEditable',
+		[ '$resource', function($resource) {
+			return $resource('system-parameter/filter/all-editable', {}, {
+				get : {
+					method : 'GET',
+					params : {
+						'requestId' : '@requestId'
+					}
+				}
+			});
+		} ]);
+angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('bulkSave',
+		[ '$resource', function($resource) {
+			return $resource('system-parameter/bulk/save', {}, {
+				post : {
+					method : 'POST',
+					params : {
+						'requestId' : '@requestId'
+					}
+				}
+			});
+		} ]);
