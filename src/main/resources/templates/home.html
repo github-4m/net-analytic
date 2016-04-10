@@ -39,43 +39,62 @@
               <div class="col-sm-12" ng-if="!isLoading('cluster')">
                 <div class="col-sm-12 content-module">
                   <div class="pull-right">
+                    <button type="button" class="btn btn-sm btn-default" ng-click="clickShowClusterOfData()">
+                      <span ng-if="!clusterOfData">Show Cluster of Data</span>
+                      <span ng-if="clusterOfData">Hide Cluster of Data</span>
+                    </button>
                     <button type="button" class="btn btn-sm btn-primary" ng-click="clickCluster()">Cluster</button>
                   </div>
                 </div>
-                <div class="col-sm-5">
-                  <div class="cluster-module">
-                    <label>Total Data per Cluster</label>
-                    <canvas id="doughnut" class="chart chart-doughnut" chart-data="totalPerClusterDatas"
-                      chart-labels="totalPerClusterLabels">
+                <div class="row  content-module">
+                  <div class="col-sm-5">
+                    <div class="cluster-module">
+                      <label>Total Data per Cluster</label>
+                      <canvas id="doughnut" class="chart chart-doughnut" chart-data="totalPerClusterDatas"
+                        chart-labels="totalPerClusterLabels" chart-colours="totalPerClusterColors">
                     </canvas>
+                    </div>
+                  </div>
+                  <div class="col-sm-7">
+                    <div class="cluster-module">
+                      <label>Centroid of Cluster</label>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="text-center">Cluster</th>
+                            <th class="text-center">Attr 1</th>
+                            <th class="text-center">Attr 2</th>
+                            <th class="text-center">Attr 3</th>
+                            <th class="text-center">Attr 4</th>
+                            <th class="text-center">Attr 5</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="centroid in centroids">
+                            <td class="text-center">{{$index + 1}}</td>
+                            <td>{{centroid[0]}}</td>
+                            <td>{{centroid[1]}}</td>
+                            <td>{{centroid[2]}}</td>
+                            <td>{{centroid[3]}}</td>
+                            <td>{{centroid[4]}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <label>Cluster Time</label> <strong>{{clusterTime}} ms</strong>
+                    </div>
                   </div>
                 </div>
-                <div class="col-sm-7">
-                  <div class="cluster-module">
-                    <label>Centroid of Cluster</label>
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th class="text-center">Cluster</th>
-                          <th class="text-center">Attr 1</th>
-                          <th class="text-center">Attr 2</th>
-                          <th class="text-center">Attr 3</th>
-                          <th class="text-center">Attr 4</th>
-                          <th class="text-center">Attr 5</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr ng-repeat="centroid in centroids">
-                          <td class="text-center">{{$index + 1}}</td>
-                          <td>{{centroid[0]}}</td>
-                          <td>{{centroid[1]}}</td>
-                          <td>{{centroid[2]}}</td>
-                          <td>{{centroid[3]}}</td>
-                          <td>{{centroid[4]}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <label>Cluster Time</label> <strong>{{clusterTime}} ms</strong>
+                <div class="row" ng-if="clusterOfData">
+                  <div class="col-sm-12">
+                    <div class="cluster-module">
+                      <label>Cluster of Data</label>
+                      <canvas id="line" class="chart chart-line" chart-data="networkAccessesDatas"
+                        chart-labels="networkAccessesLabels" chart-colours="networkAccessesColors"
+                        chart-series="networkAccessesSeries">
+                    </canvas>
+                      <small>* data normalized with formula (attribute 1 / 100000), (attribute 2 * 1000),
+                        (attribute 5 / 1000)</small>
+                    </div>
                   </div>
                 </div>
               </div>

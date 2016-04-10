@@ -1,8 +1,15 @@
 angular.module('id.co.blogspot.fathan.netanalytic.controller.home', []);
 angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 		'homeController',
-		[ '$scope', 'cluster', 'filterTotalPerCluster', 'filterAllEditable', 'bulkSave',
-				function($scope, cluster, filterTotalPerCluster, filterAllEditable, bulkSave) {
+		[
+				'$scope',
+				'cluster',
+				'filterTotalPerCluster',
+				'filterAllEditable',
+				'bulkSave',
+				'filterAll',
+				function($scope, cluster, filterTotalPerCluster, filterAllEditable, bulkSave, filterAll) {
+					var colors = [ '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#803690', '#00ADF9', '#DCDCDC' ];
 					var generateUUID = function() {
 						var d = new Date().getTime();
 						var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -29,8 +36,10 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 					var postFilterTotalPerCluster = function(totalPerClusters) {
 						$scope.totalPerClusterLabels = [];
 						$scope.totalPerClusterDatas = [];
+						$scope.totalPerClusterColors = [];
 						for (var i = 0; i < $scope.centroids.length; i++) {
 							$scope.totalPerClusterLabels.push('Cluster ' + (i + 1));
+							$scope.totalPerClusterColors.push(colors[i]);
 							var exist = false;
 							for (var j = 0; j < totalPerClusters.length; j++) {
 								if (i == totalPerClusters[j][0]) {
@@ -44,18 +53,33 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 							}
 						}
 					}
+					var postFilterAll = function(networkAccesses) {
+						$scope.networkAccessesSeries = [];
+						$scope.networkAccessesDatas = [];
+						$scope.networkAccessesColors = [];
+						$scope.networkAccessesLabels = [ 'Attribute 1', 'Attribute 2', 'Attribute 3', 'Attribute 4',
+								'Attribute 5' ];
+						for (i in networkAccesses) {
+							$scope.networkAccessesSeries.push('Cluster ' + (networkAccesses[i][5] + 1));
+							$scope.networkAccessesColors.push(colors[networkAccesses[i][5]]);
+							$scope.networkAccessesDatas.push([ networkAccesses[i][0] / 100000,
+									networkAccesses[i][1] * 1000, networkAccesses[i][2], networkAccesses[i][3],
+									networkAccesses[i][4] / 1000 ]);
+						}
+					}
 					$scope.cluster = function(requestId) {
 						increaseLoading('cluster');
 						var startTime = new Date();
 						cluster.get({
 							'requestId' : requestId
 						}, function(response) {
+							var endTime = new Date();
+							$scope.clusterTime = endTime.getTime() - startTime.getTime();
 							if (response.success) {
 								$scope.centroids = response.value;
 								$scope.filterTotalPerCluster(requestId);
+								$scope.filterAll(requestId);
 							}
-							var endTime = new Date();
-							$scope.clusterTime = endTime.getTime() - startTime.getTime();
 							decreaseLoading('cluster');
 						}, function(response) {
 							decreaseLoading('cluster');
@@ -102,6 +126,19 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 							decreaseLoading('bulkSave');
 						});
 					}
+					$scope.filterAll = function(requestId) {
+						increaseLoading('networkAccesses');
+						filterAll.get({
+							'requestId' : requestId
+						}, function(response) {
+							if (response.success) {
+								postFilterAll(response.content);
+							}
+							decreaseLoading('networkAccesses');
+						}, function(response) {
+							decreaseLoading('networkAccesses');
+						});
+					}
 					$scope.isLoading = function(code) {
 						return typeof $scope.loadings[code] != 'undefined' && $scope.loadings[code] != 0;
 					}
@@ -110,14 +147,23 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 					}
 					$scope.clickCluster = function() {
 						$scope.centroids = [];
+						$scope.clusterOfData = false;
 						$scope.cluster(generateUUID());
 					}
 					$scope.clickSave = function() {
 						$scope.bulkSave(generateUUID(), $scope.systemParameters);
 					}
+					$scope.clickShowClusterOfData = function() {
+						if ($scope.clusterOfData) {
+							$scope.clusterOfData = false;
+						} else {
+							$scope.clusterOfData = true;
+						}
+					}
 					$scope.initialize = function() {
 						$scope.loadings = [];
 						$scope.clusterTime = 0;
+						$scope.clusterOfData = false;
 						$scope.filterAllEditable(generateUUID());
 					}
 					$scope.initialize();

@@ -106,4 +106,9 @@ public class NetworkAccessServiceBean implements NetworkAccessService {
     return centroids;
   }
 
+  @Override
+  public List<NetworkAccess> findAll() throws Exception {
+    return getNetworkAccessRepository().findAll();
+  }
+
 }

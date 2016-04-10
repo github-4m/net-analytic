@@ -20,6 +20,17 @@ angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('filter
 				}
 			});
 		} ]);
+angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('filterAll',
+		[ '$resource', function($resource) {
+			return $resource('network-access', {}, {
+				get : {
+					method : 'GET',
+					params : {
+						'requestId' : '@requestId'
+					}
+				}
+			});
+		} ]);
 angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('filterAllEditable',
 		[ '$resource', function($resource) {
 			return $resource('system-parameter/filter/all-editable', {}, {
