@@ -8,7 +8,9 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 				'filterAllEditable',
 				'bulkSave',
 				'filterAll',
-				function($scope, cluster, filterTotalPerCluster, filterAllEditable, bulkSave, filterAll) {
+				'calculateSilhouetteCoefficient',
+				function($scope, cluster, filterTotalPerCluster, filterAllEditable, bulkSave, filterAll,
+						calculateSilhouetteCoefficient) {
 					var colors = [ '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#803690', '#00ADF9', '#DCDCDC' ];
 					var generateUUID = function() {
 						var d = new Date().getTime();
@@ -66,6 +68,10 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 									networkAccesses[i][1] * 1000, networkAccesses[i][2], networkAccesses[i][3],
 									networkAccesses[i][4] / 1000 ]);
 						}
+					}
+					var postCalculateSilhouetteCoefficient = function(silhouetteCoefficient) {
+						$scope.silhouetteValuePerData = silhouetteCoefficient[0];
+						$scope.silhouetteValueAveragePerCluster = silhouetteCoefficient[1];
 					}
 					$scope.cluster = function(requestId) {
 						increaseLoading('cluster');
@@ -139,6 +145,19 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 							decreaseLoading('networkAccesses');
 						});
 					}
+					$scope.calculateSilhouetteCoefficient = function(requestId) {
+						increaseLoading('silhouetteCoefficient');
+						calculateSilhouetteCoefficient.get({
+							'requestId' : requestId
+						}, function(response) {
+							if (response.success) {
+								postCalculateSilhouetteCoefficient(response.value);
+							}
+							decreaseLoading('silhouetteCoefficient');
+						}, function(response) {
+							decreaseLoading('silhouetteCoefficient');
+						});
+					}
 					$scope.isLoading = function(code) {
 						return typeof $scope.loadings[code] != 'undefined' && $scope.loadings[code] != 0;
 					}
@@ -149,6 +168,9 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 						$scope.centroids = [];
 						$scope.clusterOfData = false;
 						$scope.cluster(generateUUID());
+					}
+					$scope.clickCalculate = function() {
+						$scope.calculateSilhouetteCoefficient(generateUUID());
 					}
 					$scope.clickSave = function() {
 						$scope.bulkSave(generateUUID(), $scope.systemParameters);
@@ -165,6 +187,8 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 						$scope.clusterTime = 0;
 						$scope.clusterOfData = false;
 						$scope.filterAllEditable(generateUUID());
+						$scope.silhouetteValuePerData = null;
+						$scope.silhouetteValueAveragePerCluster = null;
 					}
 					$scope.initialize();
 				} ]);

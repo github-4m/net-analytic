@@ -40,13 +40,13 @@
                 <div class="col-sm-12 content-module">
                   <div class="pull-right">
                     <button type="button" class="btn btn-sm btn-default" ng-click="clickShowClusterOfData()">
-                      <span ng-if="!clusterOfData">Show Cluster of Data</span>
-                      <span ng-if="clusterOfData">Hide Cluster of Data</span>
+                      <span ng-if="!clusterOfData">Show Cluster of Data</span> <span ng-if="clusterOfData">Hide
+                        Cluster of Data</span>
                     </button>
                     <button type="button" class="btn btn-sm btn-primary" ng-click="clickCluster()">Cluster</button>
                   </div>
                 </div>
-                <div class="row  content-module">
+                <div class="row content-module">
                   <div class="col-sm-5">
                     <div class="cluster-module">
                       <label>Total Data per Cluster</label>
@@ -105,7 +105,56 @@
               </div>
             </div>
           </div>
-          </uib-tab> <uib-tab index="1" heading="System Parameter">
+          </uib-tab> <uib-tab index="1" heading="Silhouette Coefficient">
+          <div class="content">
+            <div class="row" ng-if="!isCentroidsExist()">
+              <div class="col-sm-12">
+                <div class="text-center">
+                  <p>Please cluster the data first, you can do that from tab "Network Cluster"</p>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-if="isCentroidsExist()">
+              <div class="col-sm-12">
+                <div class="col-sm-12 content-module">
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="clickCalculate()">Calculate</button>
+                  </div>
+                </div>
+              </div>
+              <div ng-if="silhouetteValueAveragePerCluster != null">
+                <div class="col-sm-12" ng-if="!isLoading('silhouetteCoefficient')">
+                  <div class="row content-module">
+                    <div class="col-sm-6">
+                      <div class="cluster-module">
+                        <label>Silhouette Coefficient Value Per Cluster</label>
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th class="text-center">Cluster</th>
+                              <th class="text-center">Value</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="centroid in centroids">
+                              <td class="text-center">{{$index + 1}}</td>
+                              <td>{{silhouetteValueAveragePerCluster['' + $index]}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12" ng-if="isLoading('silhouetteCoefficient')">
+                  <div class="text-center">
+                    <img src="../static/images/loader.gif" th:src="@{images/loader.gif}" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </uib-tab> <uib-tab index="2" heading="System Parameter">
           <div class="content">
             <div class="row">
               <div class="col-sm-12">

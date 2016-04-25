@@ -24,6 +24,7 @@ public class NetworkAccess implements Serializable {
   public static final String COLUMN_ACCESS_DURATION = "ACCESS_DURATION";
   public static final String COLUMN_ACCESS_SIZE = "ACCESS_SIZE";
   public static final String COLUMN_CLUSTER_CODE = "CLUSTER_CODE";
+  public static final String COLUMN_SILHOUETTE_VALUE = "SILHOUETTE_VALUE";
 
   @Id
   @Column(name = COLUMN_ID)
@@ -50,6 +51,9 @@ public class NetworkAccess implements Serializable {
   @Column(name = COLUMN_CLUSTER_CODE)
   private Integer clusterCode;
 
+  @Column(name = COLUMN_SILHOUETTE_VALUE)
+  private Double silhouetteValue;
+
   public NetworkAccess() {
     // do nothing
   }
@@ -64,6 +68,12 @@ public class NetworkAccess implements Serializable {
     this.accessDuration = accessDuration;
     this.accessSize = accessSize;
     this.clusterCode = clusterCode;
+  }
+
+  public NetworkAccess(String id, Date accessTime, String ipAddress, Long urlCluster, Long accessDuration,
+      Long accessSize, Integer clusterCode, Double silhouetteValue) {
+    this(id, accessTime, ipAddress, urlCluster, accessDuration, accessSize, clusterCode);
+    this.silhouetteValue = silhouetteValue;
   }
 
   public String getId() {
@@ -122,16 +132,25 @@ public class NetworkAccess implements Serializable {
     this.clusterCode = clusterCode;
   }
 
+  public Double getSilhouetteValue() {
+    return silhouetteValue;
+  }
+
+  public void setSilhouetteValue(Double silhouetteValue) {
+    this.silhouetteValue = silhouetteValue;
+  }
+
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append("NetworkAccess [id=").append(id).append(", accessTime=").append(accessTime).append(", ipAddress=")
         .append(ipAddress).append(", urlCluster=").append(urlCluster).append(", accessDuration=")
         .append(accessDuration).append(", accessSize=").append(accessSize).append(", clusterCode=").append(clusterCode)
-        .append(", getId()=").append(getId()).append(", getAccessTime()=").append(getAccessTime())
-        .append(", getIpAddress()=").append(getIpAddress()).append(", getUrlCluster()=").append(getUrlCluster())
-        .append(", getAccessDuration()=").append(getAccessDuration()).append(", getAccessSize()=")
-        .append(getAccessSize()).append(", getClusterCode()=").append(getClusterCode()).append("]");
+        .append(", silhouetteValue=").append(silhouetteValue).append(", getId()=").append(getId())
+        .append(", getAccessTime()=").append(getAccessTime()).append(", getIpAddress()=").append(getIpAddress())
+        .append(", getUrlCluster()=").append(getUrlCluster()).append(", getAccessDuration()=")
+        .append(getAccessDuration()).append(", getAccessSize()=").append(getAccessSize()).append(", getClusterCode()=")
+        .append(getClusterCode()).append(", getSilhouetteValue()=").append(getSilhouetteValue()).append("]");
     return builder.toString();
   }
 

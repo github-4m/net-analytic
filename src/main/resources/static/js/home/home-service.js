@@ -53,3 +53,14 @@ angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('bulkSa
 				}
 			});
 		} ]);
+angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('calculateSilhouetteCoefficient',
+		[ '$resource', function($resource) {
+			return $resource('silhouette-coefficient/calculate', {}, {
+				get : {
+					method : 'GET',
+					params : {
+						'requestId' : '@requestId'
+					}
+				}
+			});
+		} ]);
