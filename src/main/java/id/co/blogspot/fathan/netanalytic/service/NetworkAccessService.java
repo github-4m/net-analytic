@@ -13,7 +13,7 @@ public interface NetworkAccessService {
 
   List<List<Integer>> findTotalPerCluster() throws Exception;
 
-  List<List<Long>> cluster() throws Exception;
+  List<List<Long>> cluster(Boolean useGeneticAlgorithm) throws Exception;
 
   List<NetworkAccess> findAll() throws Exception;
 

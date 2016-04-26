@@ -24,3 +24,8 @@
 .cluster-module label {
 	color: #337ab7;
 }
+
+.btn-group input[type=checkbox] {
+	margin: 0;
+	vertical-align: middle;
+}

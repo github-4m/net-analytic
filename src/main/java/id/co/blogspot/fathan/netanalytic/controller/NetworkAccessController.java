@@ -43,10 +43,12 @@ public class NetworkAccessController {
   @RequestMapping(value = NetworkAccessController.CLUSTER, method = RequestMethod.GET,
       produces = {MediaType.APPLICATION_JSON_VALUE})
   @ResponseBody
-  public SingleRestResponse<List<List<Long>>> cluster(@RequestParam String requestId) throws Exception {
+  public SingleRestResponse<List<List<Long>>> cluster(@RequestParam String requestId, @RequestParam(
+      defaultValue = "true") Boolean useGeneticAlgorithm) throws Exception {
     try {
-      LOGGER.info("invoking cluster network access at controller. Request Id : {}", new Object[] {requestId});
-      List<List<Long>> centroids = getNetworkAccessService().cluster();
+      LOGGER.info("invoking cluster network access at controller. Request Id : {}, Use Genetic Algorithm : {}",
+          new Object[] {requestId, useGeneticAlgorithm});
+      List<List<Long>> centroids = getNetworkAccessService().cluster(useGeneticAlgorithm);
       return new SingleRestResponse<List<List<Long>>>(null, null, true, requestId, centroids);
     } catch (Exception e) {
       LOGGER.error("error invoking cluster network access at controller.", e);

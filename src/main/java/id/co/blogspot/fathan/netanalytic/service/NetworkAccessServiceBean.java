@@ -44,6 +44,19 @@ public class NetworkAccessServiceBean implements NetworkAccessService {
     return systemParameterRepository;
   }
 
+  private List<List<Long>> generateCentroids(List<Long> maxValueAttributes, Integer totalAttribute,
+      Integer totalCentroid) throws Exception {
+    List<List<Long>> centroids = new ArrayList<List<Long>>();
+    for (int i = 0; i < totalCentroid; i++) {
+      List<Long> centroid = new ArrayList<Long>();
+      for (int j = 0; j < totalAttribute; j++) {
+        centroid.add(Long.valueOf(Double.valueOf(Math.random() * maxValueAttributes.get(j)).longValue()));
+      }
+      centroids.add(centroid);
+    }
+    return centroids;
+  }
+
   public void setSystemParameterRepository(SystemParameterRepository systemParameterRepository) {
     this.systemParameterRepository = systemParameterRepository;
   }
@@ -76,7 +89,7 @@ public class NetworkAccessServiceBean implements NetworkAccessService {
 
   @Override
   @Transactional(readOnly = false, rollbackFor = Exception.class)
-  public List<List<Long>> cluster() throws Exception {
+  public List<List<Long>> cluster(Boolean useGeneticAlgorithm) throws Exception {
     List<NetworkAccess> networkAccesses = getNetworkAccessRepository().findAll();
     Integer totalIndividual =
         Integer.parseInt(getSystemParameterRepository().findByCode(NetworkAccessServiceBean.SP_TOTAL_INDIVIDUAL)
@@ -97,9 +110,14 @@ public class NetworkAccessServiceBean implements NetworkAccessService {
     maxValueAttributes.add((Long) maxAttributes[2]);
     maxValueAttributes.add((Long) maxAttributes[3]);
     maxValueAttributes.add((Long) maxAttributes[4]);
-    GeneticAlgorithm geneticAlgorithm =
-        new GeneticAlgorithm(networkAccesses, maxValueAttributes, totalAttribute, totalCentroid, totalIndividual);
-    List<List<Long>> centroids = geneticAlgorithm.generateCentroid(defaultIteration);
+    List<List<Long>> centroids = null;
+    if (useGeneticAlgorithm) {
+      GeneticAlgorithm geneticAlgorithm =
+          new GeneticAlgorithm(networkAccesses, maxValueAttributes, totalAttribute, totalCentroid, totalIndividual);
+      centroids = geneticAlgorithm.generateCentroid(defaultIteration);
+    } else {
+      centroids = generateCentroids(maxValueAttributes, totalAttribute, totalCentroid);
+    }
     KMeans kMeans = new KMeans(networkAccesses, centroids, totalAttribute, totalCentroid);
     kMeans.cluster(defaultIteration, centroids);
     getNetworkAccessRepository().save(networkAccesses);

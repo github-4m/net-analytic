@@ -4,7 +4,8 @@ angular.module('id.co.blogspot.fathan.netanalytic.service.home').factory('cluste
 		get : {
 			method : 'GET',
 			params : {
-				'requestId' : '@requestId'
+				'requestId' : '@requestId',
+				'useGeneticAlgorithm' : '@useGeneticAlgorithm'
 			}
 		}
 	});

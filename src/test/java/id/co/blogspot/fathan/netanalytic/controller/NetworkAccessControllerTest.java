@@ -80,7 +80,7 @@ public class NetworkAccessControllerTest {
     networkAccesses.add(new NetworkAccess(null, new Date(), DEFAULT_IP_ADDRESS, DEFAULT_URL_CLUSTER,
         DEFAULT_ACCESS_DURATION, DEFAULT_ACCESS_SIZE, DEFAULT_CLUSTER_CODE));
 
-    Mockito.when(getNetworkAccessService().cluster()).thenReturn(new ArrayList<List<Long>>());
+    Mockito.when(getNetworkAccessService().cluster(Mockito.anyBoolean())).thenReturn(new ArrayList<List<Long>>());
     Mockito.when(getNetworkAccessService().findTotalPerCluster()).thenReturn(new ArrayList<List<Integer>>());
     Mockito.when(getNetworkAccessService().findAll()).thenReturn(networkAccesses);
   }
@@ -93,19 +93,19 @@ public class NetworkAccessControllerTest {
     getMockMvc().perform(
         MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk());
-    Mockito.verify(getNetworkAccessService()).cluster();
+    Mockito.verify(getNetworkAccessService()).cluster(Mockito.anyBoolean());
   }
 
   @Test
   public void clusterTestWithException() throws Exception {
-    Mockito.doThrow(Exception.class).when(getNetworkAccessService()).cluster();
+    Mockito.doThrow(Exception.class).when(getNetworkAccessService()).cluster(Mockito.anyBoolean());
     URI uri =
         new URI(NetworkAccessController.BASE_PATH + NetworkAccessController.CLUSTER + "?requestId="
             + DEFAULT_REQUEST_ID);
     getMockMvc().perform(
         MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk());
-    Mockito.verify(getNetworkAccessService()).cluster();
+    Mockito.verify(getNetworkAccessService()).cluster(Mockito.anyBoolean());
   }
 
   @Test

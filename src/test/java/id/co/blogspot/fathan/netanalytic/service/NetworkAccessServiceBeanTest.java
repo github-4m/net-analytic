@@ -125,7 +125,20 @@ public class NetworkAccessServiceBeanTest {
 
   @Test
   public void clusterTest() throws Exception {
-    getNetworkAccessServiceBean().cluster();
+    getNetworkAccessServiceBean().cluster(true);
+    Mockito.verify(getNetworkAccessRepository()).findAll();
+    Mockito.verify(getSystemParameterRepository()).findByCode(Mockito.eq(NetworkAccessServiceBean.SP_TOTAL_CENTROID));
+    Mockito.verify(getSystemParameterRepository()).findByCode(Mockito.eq(NetworkAccessServiceBean.SP_TOTAL_INDIVIDUAL));
+    Mockito.verify(getSystemParameterRepository()).findByCode(Mockito.eq(NetworkAccessServiceBean.SP_TOTAL_ATTRIBUTE));
+    Mockito.verify(getSystemParameterRepository())
+        .findByCode(Mockito.eq(NetworkAccessServiceBean.SP_DEFAULT_ITERATION));
+    Mockito.verify(getNetworkAccessRepository()).findMaxAttributes();
+    Mockito.verify(getNetworkAccessRepository()).save((List<NetworkAccess>) Mockito.anyObject());
+  }
+
+  @Test
+  public void clusterTestWithoutGeneticAlgorithm() throws Exception {
+    getNetworkAccessServiceBean().cluster(false);
     Mockito.verify(getNetworkAccessRepository()).findAll();
     Mockito.verify(getSystemParameterRepository()).findByCode(Mockito.eq(NetworkAccessServiceBean.SP_TOTAL_CENTROID));
     Mockito.verify(getSystemParameterRepository()).findByCode(Mockito.eq(NetworkAccessServiceBean.SP_TOTAL_INDIVIDUAL));

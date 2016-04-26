@@ -73,11 +73,12 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 						$scope.silhouetteValuePerData = silhouetteCoefficient[0];
 						$scope.silhouetteValueAveragePerCluster = silhouetteCoefficient[1];
 					}
-					$scope.cluster = function(requestId) {
+					$scope.cluster = function(requestId, useGeneticAlgorithm) {
 						increaseLoading('cluster');
 						var startTime = new Date();
 						cluster.get({
-							'requestId' : requestId
+							'requestId' : requestId,
+							'useGeneticAlgorithm' : useGeneticAlgorithm
 						}, function(response) {
 							var endTime = new Date();
 							$scope.clusterTime = endTime.getTime() - startTime.getTime();
@@ -164,10 +165,17 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 					$scope.isCentroidsExist = function() {
 						return typeof $scope.centroids != 'undefined';
 					}
+					$scope.infoUseGeneticAlgorithm = function() {
+						var info = 'without Genetic Algorithm';
+						if ($scope.checkbox.useGeneticAlgorithm) {
+							info = 'with Genetic Algorithm';
+						}
+						return info;
+					}
 					$scope.clickCluster = function() {
 						$scope.centroids = [];
 						$scope.clusterOfData = false;
-						$scope.cluster(generateUUID());
+						$scope.cluster(generateUUID(), $scope.checkbox.useGeneticAlgorithm);
 					}
 					$scope.clickCalculate = function() {
 						$scope.calculateSilhouetteCoefficient(generateUUID());
@@ -186,6 +194,9 @@ angular.module('id.co.blogspot.fathan.netanalytic.controller.home').controller(
 						$scope.loadings = [];
 						$scope.clusterTime = 0;
 						$scope.clusterOfData = false;
+						$scope.checkbox = {
+							useGeneticAlgorithm : true
+						}
 						$scope.filterAllEditable(generateUUID());
 						$scope.silhouetteValuePerData = null;
 						$scope.silhouetteValueAveragePerCluster = null;

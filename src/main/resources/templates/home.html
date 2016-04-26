@@ -43,7 +43,13 @@
                       <span ng-if="!clusterOfData">Show Cluster of Data</span> <span ng-if="clusterOfData">Hide
                         Cluster of Data</span>
                     </button>
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="clickCluster()">Cluster</button>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-primary" ng-click="clickCluster()">Cluster
+                        {{infoUseGeneticAlgorithm()}}</button>
+                      <button type="button" class="btn btn-sm btn-primary">
+                        <input type="checkbox" ng-model="checkbox.useGeneticAlgorithm" />
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div class="row content-module">
@@ -138,7 +144,8 @@
                           <tbody>
                             <tr ng-repeat="centroid in centroids">
                               <td class="text-center">{{$index + 1}}</td>
-                              <td>{{silhouetteValueAveragePerCluster['' + $index]}}</td>
+                              <td>{{silhouetteValueAveragePerCluster['' + $index] == undefined ? '-' :
+                                silhouetteValueAveragePerCluster['' + $index]}}</td>
                             </tr>
                           </tbody>
                         </table>
